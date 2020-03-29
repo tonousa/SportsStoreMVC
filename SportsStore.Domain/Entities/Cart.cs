@@ -50,10 +50,12 @@ namespace SportsStore.Domain.Entities
             get { return lineCollection; }
         }
 
-        public class CartLine
-        {
-            public Product Product { get; set; }
-            public int Quantity { get; set; }
-        }
+ 
+    }
+
+    public class CartLine
+    {
+        public Product Product { get; set; }
+        public int Quantity { get; set; }
     }
 }
