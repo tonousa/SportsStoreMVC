@@ -197,5 +197,66 @@ namespace SportsStore.UnitTest
             Assert.AreEqual(res2, 2);
             Assert.AreEqual(resAll, 4);
         }
+
+        [TestMethod]
+        public void Cannot_Checkout_Empty_Cart()
+        {
+            // Arrange
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            CartController target = new CartController(null, mock.Object);
+            Cart cart = new Cart();
+            ShippingDetails shippingDetails = new ShippingDetails();
+
+            // Act
+            ViewResult result = target.Checkout(cart, shippingDetails);
+
+            // Assert - order hasn't been passed to the processor
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()), Times.Never);
+            Assert.AreEqual("", result.ViewName);
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+        [TestMethod]
+        public void Cannot_Checkout_Invalid_ShippingDetails()
+        {
+            //Arrange
+            Cart cart = new Cart();
+            cart.AddItem(new Product(), 1);
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+
+            CartController target = new CartController(null, mock.Object);
+            target.ModelState.AddModelError("error", "error");
+
+            //Act
+            ViewResult result = target.Checkout(cart, new ShippingDetails());
+
+            //Assert - check that order hasn't been passed to the processor
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()),
+                Times.Never());
+            //checkout is returning the default view
+            System.Diagnostics.Debug.WriteLine("skdjflakjsdf" + result.ViewName);
+            Assert.AreEqual("", result.ViewName);
+            // check passign invalid value to view
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+        }
+
+        [TestMethod]
+        public void Can_Checkout_And_Submit_Order()
+        {
+            // Arrange
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            CartController target = new CartController(null, mock.Object);
+            Cart cart = new Cart();
+            cart.AddItem(new Product(), 1);
+
+            //Act
+            ViewResult result = target.Checkout(cart, new ShippingDetails());
+
+            // Assert - order has been passed to the processor
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Cart>(), It.IsAny<ShippingDetails>()),
+                Times.Once);
+            Assert.AreEqual(result.ViewName, "Completed");
+            Assert.AreEqual(true, result.ViewData.ModelState.IsValid);
+        }
     }
 }

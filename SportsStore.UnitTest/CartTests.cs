@@ -123,7 +123,7 @@ namespace SportsStore.UnitTest
 
             Cart cart = new Cart();
 
-            CartController target = new CartController(mock.Object);
+            CartController target = new CartController(mock.Object, null);
 
             //Act
             target.AddToCart(cart, 1, null);
@@ -143,7 +143,7 @@ namespace SportsStore.UnitTest
             }.AsQueryable());
 
             Cart cart = new Cart();
-            CartController target = new CartController(mock.Object);
+            CartController target = new CartController(mock.Object, null);
 
             //Act
             RedirectToRouteResult result = target.AddToCart(cart, 2, "myUrl");
@@ -158,7 +158,7 @@ namespace SportsStore.UnitTest
         {
             //Arrange
             Cart cart = new Cart();
-            CartController target = new CartController(null);
+            CartController target = new CartController(null, null);
 
             //act
             CartIndexViewModel result = (CartIndexViewModel)target.Index(cart, "myUrl").ViewData.Model;
