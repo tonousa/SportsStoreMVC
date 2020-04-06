@@ -11,7 +11,11 @@
 </head>
 <body>
     <div class="navbar navbar-inverse" role="navigation">
-        <a class="navbar-brand" href="#">SPORTS STORE</a>
+        <a class="navbar-brand" href="#">
+            <span class="hidden-xs">SPORTS STORE</span>
+            <div class="visible-xs">SPORTS</div>
+            <div class="visible-xs">STORE</div>
+        </a>
         @Html.Action("Summary", "Cart")
     </div>
 
