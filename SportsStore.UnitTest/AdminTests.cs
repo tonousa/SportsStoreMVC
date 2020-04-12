@@ -36,5 +36,49 @@ namespace SportsStore.UnitTest
             Assert.AreEqual(result[1].Name, "P2");
             Assert.AreEqual(result[2].Name, "P3");
         }
+
+        [TestMethod]
+        public void Can_Edit_Product()
+        {
+            // Arrange
+            Mock<IProductsRepository> mock = new Mock<IProductsRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[]
+            {
+                new Product {ProductID = 1, Name = "P1"},
+                new Product {ProductID = 2, Name = "P2"},
+                new Product {ProductID = 3, Name = "P3"},
+            });
+            AdminController target = new AdminController(mock.Object);
+
+            // Act
+            Product p1 = target.Edit(1).ViewData.Model as Product;
+            Product p2 = target.Edit(2).ViewData.Model as Product;
+            Product p3 = target.Edit(3).ViewData.Model as Product;
+
+            // Assert
+            Assert.AreEqual(p1.ProductID, 1);
+            Assert.AreEqual(p2.ProductID, 2);
+            Assert.AreEqual(p3.ProductID, 3);
+        }
+
+        [TestMethod]
+        public void Cannot_Edit_Nonexisting_Product()
+        {
+            // Arrange
+            Mock<IProductsRepository> mock = new Mock<IProductsRepository>();
+            mock.Setup(m => m.Products).Returns(new Product[]
+            {
+                new Product {ProductID = 1, Name = "P1"},
+                new Product {ProductID = 2, Name = "P2"},
+                new Product {ProductID = 3, Name = "P3"},
+            });
+            AdminController target = new AdminController(mock.Object);
+
+            // Act
+            Product result = target.Edit(4).ViewData.Model as Product;
+
+            // Assert
+            Assert.IsNull(result);
+        }
     }
 }
