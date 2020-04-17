@@ -41,10 +41,12 @@
                 }
             }
         </div>
+
+        <div class="panel-footer">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            @Html.ActionLink("Cancel", "Index", null,
+            new { @class = "btn btn-default" })
+        </div>
     }
-    <div class="panel-footer">
-        <input type="submit" value="Save" class="btn btn-primary" />
-        @Html.ActionLink("Cancel", "Index", null,
-            new { @class="btn btn-default" })
-    </div>
+    
 </div>
