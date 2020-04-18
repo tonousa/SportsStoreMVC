@@ -13,11 +13,17 @@ namespace SportsStore.Domain.Entities
         [HiddenInput(DisplayValue = false)]
         public int ProductID { get; set; }
 
+        [Required(ErrorMessage ="enter product name")]
         public string Name { get; set; }
 
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
+
+        [Required(ErrorMessage ="enter price")]
+        [Range(0.01, double.MaxValue, ErrorMessage ="enter positive price")]
         public decimal Price { get; set; }
+
+        [Required(ErrorMessage ="enter category")]
         public string Category { get; set; }
     }
 }
