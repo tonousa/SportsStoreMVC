@@ -30,5 +30,23 @@ namespace SportsStore.UnitTest
             Assert.IsInstanceOfType(result, typeof(RedirectResult));
             Assert.AreEqual("/MyUrl", ((RedirectResult)result).Url);
         }
+
+        [TestMethod]
+        public void Cannot_Login_Invalid_Credentials()
+        {
+            Mock<IAuthProvider> mock = new Mock<IAuthProvider>();
+            mock.Setup(m => m.Authenticate("badU", "badP")).Returns(false);
+            LoginViewModel model = new LoginViewModel
+            {
+                UserName = "badU",
+                Password = "badP"
+            };
+            AccountController target = new AccountController(mock.Object);
+
+            ActionResult result = target.Login(model, "/MyUrl");
+
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            Assert.IsFalse(((ViewResult)result).ViewData.ModelState.IsValid);
+        }
     }
 }
